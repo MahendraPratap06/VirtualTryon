@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Virtual Try-On — AI Fashion Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+  <div class="ambient">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <header class="hero">
+    <div class="hero-eyebrow"><span class="dot"></span><span>AI FASHION STUDIO</span><span class="dot"></span></div>
+    <h1 class="hero-title">
+      <span class="title-thin">Virtual</span>
+      <em class="title-bold">Try&#8209;On</em>
+    </h1>
+    <p class="hero-sub">Upload your photos. Choose your garments.<br/>Watch AI dress you in seconds.</p>
+    <div class="hero-line"></div>
+  </header>
+
+  <main class="app">
+
+    <!-- Steps -->
+    <div class="steps">
+      <div class="step active" id="step-1"><span class="step-num">01</span><span class="step-label">Upload Photos</span></div>
+      <div class="step-connector"></div>
+      <div class="step" id="step-2"><span class="step-num">02</span><span class="step-label">AI Processing</span></div>
+      <div class="step-connector"></div>
+      <div class="step" id="step-3"><span class="step-num">03</span><span class="step-label">Your Outfits</span></div>
+    </div>
+
+    <section class="upload-panel" id="upload-panel">
+
+      <!-- ── PERSON PHOTOS ────────────────────────────────────────────── -->
+      <div class="section-header">
+        <span class="section-label">YOUR PHOTOS</span>
+        <span class="section-hint">Up to 3 poses for more accurate results</span>
+      </div>
+
+      <div class="person-grid" id="person-grid">
+
+        <!-- Person 1 — always visible -->
+        <div class="upload-card person-card" id="card-person-1">
+          <div class="card-label">
+            <span class="card-num">01</span>
+            <span class="card-title">Front Pose</span>
+            <span class="card-tag required-tag">REQUIRED</span>
+          </div>
+          <div class="drop-zone" id="zone-person-1" onclick="triggerUpload('person-1')">
+            <input type="file" id="input-person-1" accept="image/*" hidden onchange="handleFile('person-1', this)"/>
+            <div class="drop-content" id="content-person-1">
+              <div class="drop-icon">
+                <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                  <path d="M16 4L16 22M16 4L10 10M16 4L22 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M4 24L4 27C4 28.1 4.9 29 6 29L26 29C27.1 29 28 28.1 28 27L28 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <p class="drop-main">Drop photo here</p>
+              <p class="drop-hint">or click to browse</p>
+            </div>
+            <img class="drop-preview" id="preview-person-1" alt=""/>
+            <div class="drop-overlay">
+              <button class="overlay-remove" onclick="removeFile(event,'person-1')">&#10005; Remove</button>
+              <button class="overlay-change" onclick="triggerUpload('person-1')">&#8635; Change</button>
+            </div>
+          </div>
+          <p class="card-filename" id="name-person-1">No file selected</p>
+        </div>
+
+        <!-- Person 2 — hidden until Add Pose clicked -->
+        <div class="upload-card person-card" id="card-person-2" style="display:none;">
+          <div class="card-label">
+            <span class="card-num">02</span>
+            <span class="card-title">Side / Angle Pose</span>
+            <span class="card-tag optional-tag">OPTIONAL</span>
+          </div>
+          <div class="drop-zone" id="zone-person-2" onclick="triggerUpload('person-2')">
+            <input type="file" id="input-person-2" accept="image/*" hidden onchange="handleFile('person-2', this)"/>
+            <div class="drop-content" id="content-person-2">
+              <div class="drop-icon">
+                <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                  <path d="M16 4L16 22M16 4L10 10M16 4L22 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M4 24L4 27C4 28.1 4.9 29 6 29L26 29C27.1 29 28 28.1 28 27L28 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <p class="drop-main">Drop photo here</p>
+              <p class="drop-hint">or click to browse</p>
+            </div>
+            <img class="drop-preview" id="preview-person-2" alt=""/>
+            <div class="drop-overlay">
+              <button class="overlay-remove" onclick="removeFile(event,'person-2')">&#10005; Remove</button>
+              <button class="overlay-change" onclick="triggerUpload('person-2')">&#8635; Change</button>
+            </div>
+          </div>
+          <p class="card-filename" id="name-person-2">No file selected</p>
+        </div>
+
+        <!-- Person 3 — hidden until Add Pose clicked twice -->
+        <div class="upload-card person-card" id="card-person-3" style="display:none;">
+          <div class="card-label">
+            <span class="card-num">03</span>
+            <span class="card-title">Back / Other Pose</span>
+            <span class="card-tag optional-tag">OPTIONAL</span>
+          </div>
+          <div class="drop-zone" id="zone-person-3" onclick="triggerUpload('person-3')">
+            <input type="file" id="input-person-3" accept="image/*" hidden onchange="handleFile('person-3', this)"/>
+            <div class="drop-content" id="content-person-3">
+              <div class="drop-icon">
+                <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                  <path d="M16 4L16 22M16 4L10 10M16 4L22 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M4 24L4 27C4 28.1 4.9 29 6 29L26 29C27.1 29 28 28.1 28 27L28 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <p class="drop-main">Drop photo here</p>
+              <p class="drop-hint">or click to browse</p>
+            </div>
+            <img class="drop-preview" id="preview-person-3" alt=""/>
+            <div class="drop-overlay">
+              <button class="overlay-remove" onclick="removeFile(event,'person-3')">&#10005; Remove</button>
+              <button class="overlay-change" onclick="triggerUpload('person-3')">&#8635; Change</button>
+            </div>
+          </div>
+          <p class="card-filename" id="name-person-3">No file selected</p>
+        </div>
+
+        <!-- Add Pose Button -->
+        <div class="add-pose-card" id="add-pose-btn" onclick="addPose()">
+          <div class="add-pose-inner">
+            <div class="add-pose-icon">+</div>
+            <p class="add-pose-label">Add Pose</p>
+            <p class="add-pose-hint">More poses = more results</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── GARMENTS ─────────────────────────────────────────────────── -->
+      <div class="section-header" style="margin-top: 2.5rem;">
+        <span class="section-label">GARMENTS</span>
+        <span class="section-hint">Upload at least one garment</span>
+      </div>
+
+      <div class="upload-grid">
+
+        <!-- Shirt -->
+        <div class="upload-card" id="card-shirt">
+          <div class="card-label">
+            <span class="card-num">A</span>
+            <span class="card-title">Top / Shirt</span>
+            <span class="card-tag optional-tag">OPTIONAL</span>
+          </div>
+          <div class="drop-zone" id="zone-shirt" onclick="triggerUpload('shirt')">
+            <input type="file" id="input-shirt" accept="image/*" hidden onchange="handleFile('shirt', this)"/>
+            <div class="drop-content" id="content-shirt">
+              <div class="drop-icon">
+                <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                  <path d="M16 4L16 22M16 4L10 10M16 4L22 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M4 24L4 27C4 28.1 4.9 29 6 29L26 29C27.1 29 28 28.1 28 27L28 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <p class="drop-main">Drop garment here</p>
+              <p class="drop-hint">or click to browse</p>
+            </div>
+            <img class="drop-preview" id="preview-shirt" alt=""/>
+            <div class="drop-overlay">
+              <button class="overlay-remove" onclick="removeFile(event,'shirt')">&#10005; Remove</button>
+              <button class="overlay-change" onclick="triggerUpload('shirt')">&#8635; Change</button>
+            </div>
+          </div>
+          <p class="card-filename" id="name-shirt">No file selected</p>
+        </div>
+
+        <!-- Pants -->
+        <div class="upload-card" id="card-pants">
+          <div class="card-label">
+            <span class="card-num">B</span>
+            <span class="card-title">Pants / Skirt</span>
+            <span class="card-tag optional-tag">OPTIONAL</span>
+          </div>
+          <div class="drop-zone" id="zone-pants" onclick="triggerUpload('pants')">
+            <input type="file" id="input-pants" accept="image/*" hidden onchange="handleFile('pants', this)"/>
+            <div class="drop-content" id="content-pants">
+              <div class="drop-icon">
+                <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                  <path d="M16 4L16 22M16 4L10 10M16 4L22 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M4 24L4 27C4 28.1 4.9 29 6 29L26 29C27.1 29 28 28.1 28 27L28 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <p class="drop-main">Drop garment here</p>
+              <p class="drop-hint">or click to browse</p>
+            </div>
+            <img class="drop-preview" id="preview-pants" alt=""/>
+            <div class="drop-overlay">
+              <button class="overlay-remove" onclick="removeFile(event,'pants')">&#10005; Remove</button>
+              <button class="overlay-change" onclick="triggerUpload('pants')">&#8635; Change</button>
+            </div>
+          </div>
+          <p class="card-filename" id="name-pants">No file selected</p>
+        </div>
+
+        <!-- Dress -->
+        <div class="upload-card" id="card-dress">
+          <div class="card-label">
+            <span class="card-num">C</span>
+            <span class="card-title">Dress / Gown</span>
+            <span class="card-tag optional-tag">OPTIONAL</span>
+          </div>
+          <div class="drop-zone" id="zone-dress" onclick="triggerUpload('dress')">
+            <input type="file" id="input-dress" accept="image/*" hidden onchange="handleFile('dress', this)"/>
+            <div class="drop-content" id="content-dress">
+              <div class="drop-icon">
+                <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+                  <path d="M16 4L16 22M16 4L10 10M16 4L22 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M4 24L4 27C4 28.1 4.9 29 6 29L26 29C27.1 29 28 28.1 28 27L28 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <p class="drop-main">Drop garment here</p>
+              <p class="drop-hint">or click to browse</p>
+            </div>
+            <img class="drop-preview" id="preview-dress" alt=""/>
+            <div class="drop-overlay">
+              <button class="overlay-remove" onclick="removeFile(event,'dress')">&#10005; Remove</button>
+              <button class="overlay-change" onclick="triggerUpload('dress')">&#8635; Change</button>
+            </div>
+          </div>
+          <p class="card-filename" id="name-dress">No file selected</p>
+        </div>
+
+      </div>
+
+      <!-- Status + CTA -->
+      <div class="status-bar" id="status-bar">
+        <div class="status-icon" id="status-icon">&#9675;</div>
+        <p class="status-text" id="status-text">Upload your photo and at least one garment to get started</p>
+      </div>
+
+      <div class="cta-row">
+        <button class="tryon-btn" id="tryon-btn" onclick="submitTryOn()" disabled>
+          <span class="btn-inner">
+            <span class="btn-label">Generate Outfit</span>
+            <span class="btn-icon">&#8594;</span>
+          </span>
+          <span class="btn-shine"></span>
+        </button>
+        <p class="cta-note" id="cta-note">Powered by FASHN VTON v1.5 · ~30–90s per pose</p>
+      </div>
+
+    </section>
+
+    <!-- Loading -->
+    <section class="loading-panel" id="loading-panel" hidden>
+      <div class="loading-ring">
+        <svg viewBox="0 0 100 100" class="ring-svg">
+          <circle cx="50" cy="50" r="44" class="ring-track"/>
+          <circle cx="50" cy="50" r="44" class="ring-fill"/>
+        </svg>
+        <div class="ring-inner">
+          <span class="ring-pct" id="ring-pct">0%</span>
+        </div>
+      </div>
+      <p class="loading-stage" id="loading-stage">Initialising pipeline...</p>
+      <div class="loading-steps-list">
+        <div class="lstep" id="lstep-1">&#9675; Validating your images</div>
+        <div class="lstep" id="lstep-2">&#9675; Preparing images for AI</div>
+        <div class="lstep" id="lstep-3">&#9675; AI is styling your outfit</div>
+        <div class="lstep" id="lstep-4">&#9675; Putting the finishing touches</div>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section class="result-panel" id="result-panel" hidden>
+      <div class="result-header">
+        <span class="result-label">&#10003; Your Outfits are Ready</span>
+      </div>
+      <p class="result-subtitle" id="result-subtitle"></p>
+
+      <!-- Side-by-side result gallery -->
+      <div class="result-gallery" id="result-gallery"></div>
+
+      <div class="result-reset">
+        <button class="btn-retry" onclick="resetAll()">&#8635; Try Another Outfit</button>
+      </div>
+    </section>
+
+    <!-- Error -->
+    <div class="error-panel" id="error-panel" hidden>
+      <div class="error-icon">&#9888;</div>
+      <p class="error-msg" id="error-msg">Something went wrong.</p>
+      <button class="btn-retry" onclick="resetError()">&#8635; Try Again</button>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <span>Virtual Try-On &nbsp;&#183;&nbsp; Powered by FASHN VTON v1.5 &amp; LangGraph &nbsp;&#183;&nbsp; Built with FastAPI</span>
+  </footer>
+
+  <script src="/static/js/App.js"></script>
+</body>
+</html>
